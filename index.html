@@ -1,0 +1,869 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Reference — BNDR LLC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --void: #0a0a0b;
+    --bone: #e8e4dc;
+    --bone-dim: #c4bfb5;
+    --cyan: #00c8d4;
+    --cyan-dim: #007a82;
+    --ink: #1a1a1b;
+    --rule: #d0cbc0;
+    --bg: #f7f5f0;
+    --bg-section: #ffffff;
+    --warn: #c94a1a;
+    --dead: #999590;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 40px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  header {
+    border-bottom: 2px solid var(--void);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+
+  header .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--cyan-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--void);
+  }
+
+  header .subtitle {
+    font-size: 12px;
+    color: var(--dead);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  .toc {
+    background: var(--void);
+    color: var(--bone);
+    padding: 18px 24px;
+    border-radius: 4px;
+    margin-bottom: 36px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+
+  .toc-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .toc a {
+    color: var(--bone-dim);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 400;
+    transition: color 0.15s;
+  }
+
+  .toc a:hover { color: var(--cyan); }
+
+  .cat-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--void);
+  }
+
+  .cat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--cyan-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .cat-header h2 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--void);
+  }
+
+  .cat-desc {
+    font-size: 11px;
+    color: var(--dead);
+    font-weight: 300;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  section.category {
+    margin-bottom: 40px;
+  }
+
+  .platform {
+    background: var(--bg-section);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--cyan);
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .platform.deprecated {
+    border-left-color: var(--warn);
+    opacity: 0.8;
+  }
+
+  .platform.note-only {
+    border-left-color: var(--dead);
+    background: var(--bg);
+  }
+
+  .platform-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .platform-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--void);
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-free { background: #e8f5e9; color: #2e7d32; }
+  .badge-fee { background: #fff3e0; color: #e65100; }
+  .badge-sub { background: #e3f2fd; color: #1565c0; }
+  .badge-dead { background: #fce4ec; color: var(--warn); }
+  .badge-gate { background: #f3e5f5; color: #6a1b9a; }
+  .badge-mor { background: #e8eaf6; color: #283593; }
+  .badge-onetime { background: #e0f2f1; color: #00695c; }
+
+  .platform-tagline {
+    font-size: 11px;
+    color: var(--dead);
+    font-weight: 300;
+    font-style: italic;
+    margin-left: auto;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 24px;
+    margin-bottom: 6px;
+  }
+
+  .field {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .field-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--dead);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    min-width: 76px;
+    flex-shrink: 0;
+  }
+
+  .field-value {
+    color: var(--ink);
+  }
+
+  .notes {
+    font-size: 11.5px;
+    color: #444;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--rule);
+    line-height: 1.55;
+  }
+
+  .warn-tag {
+    color: var(--warn);
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .url-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cyan-dim);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--cyan-dim);
+  }
+
+  .spacer {
+    height: 8px;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding: 12px 16px;
+    background: var(--bg-section);
+    border: 1px solid var(--rule);
+    margin-bottom: 32px;
+    font-size: 11px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--dead);
+    letter-spacing: 0.06em;
+  }
+
+  @media print {
+    body { background: white; padding: 20px; font-size: 11px; }
+    .platform { page-break-inside: avoid; }
+    section.category { page-break-inside: avoid; }
+    .toc { background: #111; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">BNDR LLC — Platform Reference v1.0 — April 2026</div>
+  <h1>Sell Your Software, Tools & Services</h1>
+  <div class="subtitle">Comprehensive reference: digital product stores · app hosts · codebase exits · freelance · bounties · channels</div>
+</header>
+
+<nav class="toc">
+  <div class="toc-label">Jump To</div>
+  <a href="#cat1">1 · Digital Product Stores</a>
+  <a href="#cat2">2 · Host + Sell (App Runs in Browser)</a>
+  <a href="#cat3">3 · Sell Codebases / Exit</a>
+  <a href="#cat4">4 · Freelance Services</a>
+  <a href="#cat5">5 · Bounties</a>
+  <a href="#cat6">6 · Developer / SaaS-Specific</a>
+  <a href="#cat7">7 · Channels (Non-Platform)</a>
+</nav>
+
+<div class="legend">
+  <span style="font-family:JetBrains Mono;font-size:10px;color:var(--dead);font-weight:600;letter-spacing:.06em;text-transform:uppercase;width:100%;margin-bottom:4px;">Badge Key</span>
+  <div class="legend-item"><span class="badge badge-free">Free</span> No monthly cost</div>
+  <div class="legend-item"><span class="badge badge-fee">% Fee</span> Per-transaction cut</div>
+  <div class="legend-item"><span class="badge badge-sub">Sub</span> Monthly subscription</div>
+  <div class="legend-item"><span class="badge badge-mor">MoR</span> Merchant of Record — handles global tax</div>
+  <div class="legend-item"><span class="badge badge-gate">Gate</span> Approval process required</div>
+  <div class="legend-item"><span class="badge badge-dead">Dead</span> Deprecated / avoid</div>
+  <div class="legend-item"><span class="badge badge-onetime">One-Time</span> Pay once, own forever</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════ CAT 1 ═══ -->
+<section class="category" id="cat1">
+  <div class="cat-header">
+    <span class="cat-num">CAT·01</span>
+    <h2>Digital Product Stores — Sell Files, Tools, Zips</h2>
+  </div>
+  <p class="cat-desc">You list. Customer pays. They download the file/zip. No backend required on your end.</p>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Gumroad</span>
+      <span class="badge badge-free">Free to start</span>
+      <span class="badge badge-fee">10% + $0.50</span>
+      <span class="badge badge-mor">Full MoR</span>
+      <span class="platform-tagline">Easiest zero-to-live, highest fee at scale</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">No monthly fee. 10% + $0.50 per transaction (Stripe processing separate, ~2.9% + $0.30)</span></div>
+      <div class="field"><span class="field-label">Tax</span><span class="field-value">Full global MoR since Jan 2025 — handles VAT, GST, sales tax. You do nothing.</span></div>
+      <div class="field"><span class="field-label">Marketplace</span><span class="field-value">Yes — "Discover" (built-in). ⚠️ Discover sales take 30%, not 10%.</span></div>
+      <div class="field"><span class="field-label">Payout</span><span class="field-value">Weekly (Fridays). US bank free.</span></div>
+    </div>
+    <div class="notes">Good for: testing if something sells before committing to a platform. Live in under 5 minutes. Open-sourced on GitHub in 2025. Bad for: scale — you're paying 2x competitors once volume picks up. If you ever leave, recurring subscribers don't transfer. Support is slow. URL: <a class="url-link" href="https://gumroad.com" target="_blank">gumroad.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Payhip</span>
+      <span class="badge badge-free">Free tier</span>
+      <span class="badge badge-fee">5% / 2% / 0%</span>
+      <span class="platform-tagline">Best value at low-to-mid volume for US/EU sellers</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Free (5% txn) / Plus $29/mo (2% txn) / Pro $99/mo (0% txn). Processing separate.</span></div>
+      <div class="field"><span class="field-label">Tax</span><span class="field-value">EU + UK VAT only. NOT a full global MoR. US state sales tax = your problem.</span></div>
+      <div class="field"><span class="field-label">Payout</span><span class="field-value">Instant on transaction. Best cash flow on this list.</span></div>
+      <div class="field"><span class="field-label">Features</span><span class="field-value">PDF stamping, download limits, license key delivery, affiliate system, built-in email marketing.</span></div>
+    </div>
+    <div class="notes">Good for: the value math. At $2k+/mo revenue, Pro ($99/mo, 0%) beats Gumroad by ~$300+/mo. Good for US/EU audience. Bad for: global SaaS with complex tax needs. No built-in marketplace for discovery. URL: <a class="url-link" href="https://payhip.com" target="_blank">payhip.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Lemon Squeezy</span>
+      <span class="badge badge-free">Free tier</span>
+      <span class="badge badge-fee">5% + $0.50 base</span>
+      <span class="badge badge-mor">Full MoR</span>
+      <span class="badge badge-gate">Approval</span>
+      <span class="platform-tagline">Software/SaaS-focused, has hidden surcharges, requires application</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">5% + $0.50 base. PLUS: +1.5% international, +1.5% PayPal, +0.5% subscriptions. Effective rate higher than advertised.</span></div>
+      <div class="field"><span class="field-label">Tax</span><span class="field-value">Full global MoR. Handles everything.</span></div>
+      <div class="field"><span class="field-label">Gate</span><span class="field-value">Application/approval required. Brand review. NOT instant.</span></div>
+      <div class="field"><span class="field-label">Ownership</span><span class="field-value">Acquired by Stripe, July 2024. Mid-transition to Stripe infrastructure. Some reported reliability issues post-acquisition.</span></div>
+    </div>
+    <div class="notes"><span class="warn-tag">⚠ GATE WARNING:</span> Application required — Scott already knows this. Platform may require re-applying. Post-Stripe acquisition: some users report payment errors, delayed payouts, unexplained account bans. Strong for: license key management, subscription billing, SaaS. Affiliate program built in. URL: <a class="url-link" href="https://lemonsqueezy.com" target="_blank">lemonsqueezy.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Whop</span>
+      <span class="badge badge-free">Free base</span>
+      <span class="badge badge-fee">3% on automations</span>
+      <span class="platform-tagline">Community/access-focused. Gen Z + creator audience.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Free. 3% commission on sales with automations (Discord/Telegram access gating). Standard Stripe processing on top.</span></div>
+      <div class="field"><span class="field-label">Tax</span><span class="field-value">NOT a full MoR. You handle tax compliance yourself or hire an accountant.</span></div>
+      <div class="field"><span class="field-label">Best For</span><span class="field-value">Selling community access, digital products bundled with access, gated content.</span></div>
+      <div class="field"><span class="field-label">Note</span><span class="field-value">⚠️ International transaction surcharges and currency conversion fees apply — advertised rate isn't full picture.</span></div>
+    </div>
+    <div class="notes">Exploded in popularity 2023–2025. Strong for courses + tools + communities bundled together. Not ideal as a straight file delivery platform. URL: <a class="url-link" href="https://whop.com" target="_blank">whop.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Ko-fi</span>
+      <span class="badge badge-free">0% platform fee</span>
+      <span class="platform-tagline">Lightest weight. Tips + simple product sales. No gatekeeping.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">0% platform fee. You keep everything minus Stripe/PayPal processing. Gold tier ($6/mo) unlocks commissions, subscriptions, custom domain.</span></div>
+      <div class="field"><span class="field-label">Tax</span><span class="field-value">NOT a MoR. You handle tax.</span></div>
+    </div>
+    <div class="notes">Good for: lower-priced tools, one-off purchases, if you already have an audience. Not a discovery/marketplace platform — you bring the traffic. URL: <a class="url-link" href="https://ko-fi.com" target="_blank">ko-fi.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Sellfy</span>
+      <span class="badge badge-sub">$29–$159/mo</span>
+      <span class="badge badge-fee">0% txn</span>
+      <span class="platform-tagline">Physical + digital in one dashboard. No MoR.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Starter $29/mo, Business $79/mo, Premium $159/mo. 0% transaction fees. Processing separate.</span></div>
+      <div class="field"><span class="field-label">Tax</span><span class="field-value">NOT a MoR. You handle all tax compliance.</span></div>
+    </div>
+    <div class="notes">Good for: creators selling both digital and physical/merch from one dashboard. Has built-in email marketing. Not ideal if you need global tax handling. URL: <a class="url-link" href="https://sellfy.com" target="_blank">sellfy.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">ThriveCart</span>
+      <span class="badge badge-onetime">One-Time ~$495</span>
+      <span class="badge badge-fee">0% forever</span>
+      <span class="platform-tagline">Pay once, zero commissions forever. Cart/checkout tool, not a storefront.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">One-time purchase (historically ~$495–$690). 0% platform fees ever. Only Stripe/PayPal processing.</span></div>
+      <div class="field"><span class="field-label">What it is</span><span class="field-value">Checkout/cart builder with upsells, bump offers, affiliates. Not a marketplace. You drive your own traffic.</span></div>
+    </div>
+    <div class="notes">Best for: sellers who already have audience/traffic and want max take-home long-term. Lifetime deal means it pays for itself fast at volume. No discovery. URL: <a class="url-link" href="https://thrivecart.com" target="_blank">thrivecart.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">SendOwl</span>
+      <span class="badge badge-sub">$9–$39/mo</span>
+      <span class="badge badge-fee">0% on paid plans</span>
+      <span class="platform-tagline">Secure delivery + license keys. Simple.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">$9/mo (Starter), $15/mo (Growth), $39/mo (Pro). 0% transaction fee on all paid plans. Processing separate.</span></div>
+      <div class="field"><span class="field-label">Best For</span><span class="field-value">License key delivery, drip downloads, PDF stamping. Good developer tool delivery.</span></div>
+    </div>
+    <div class="notes">Not a marketplace. Good secure delivery layer on top of your own traffic. URL: <a class="url-link" href="https://sendowl.com" target="_blank">sendowl.com</a></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════ CAT 2 ═══ -->
+<section class="category" id="cat2">
+  <div class="cat-header">
+    <span class="cat-num">CAT·02</span>
+    <h2>Host + Sell — App Runs in Browser, No Backend</h2>
+  </div>
+  <p class="cat-desc">Platform hosts your HTML/JS app and handles payment. Customer pays → app loads. This is the category Scott was thinking of.</p>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Itch.io</span>
+      <span class="badge badge-free">Free</span>
+      <span class="badge badge-fee">You set your own %</span>
+      <span class="platform-tagline">⭐ Best fit for no-backend HTML/JS apps. Upload zip → runs in browser → sold.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">How it works</span><span class="field-value">Upload a .zip of your HTML/JS app. It runs inside the browser on itch. Customer pays, app loads. Zero backend, zero hosting setup.</span></div>
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Free. You choose what % goes to itch (default suggests 10% but you can set it to 0%). Processing via Stripe/PayPal.</span></div>
+      <div class="field"><span class="field-label">Pricing model</span><span class="field-value">Fixed price, PWYW (pay what you want with minimum), free with optional tip, or free entirely.</span></div>
+      <div class="field"><span class="field-label">Marketplace</span><span class="field-value">Yes — itch has its own discovery. Searchable by tag. Works for non-games (tools, generators, utilities).</span></div>
+    </div>
+    <div class="notes">The closest thing to "upload HTML app, sell it, done." No approval process. Instant. Primarily game-focused audience but "tools" and "interactive apps" have a real audience here. Underrated for small utilities. Large indie dev community. URL: <a class="url-link" href="https://itch.io" target="_blank">itch.io</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Payhip (file delivery)</span>
+      <span class="badge badge-free">Free tier</span>
+      <span class="platform-tagline">Delivers the zip — does NOT host/run the app in-browser.</span>
+    </div>
+    <div class="notes">Payhip delivers your file after purchase. The distinction: they don't run your HTML app embedded in their page the way itch.io does. Customer downloads the zip and runs it themselves. Still useful for distributing tools — just not the "in-browser app" experience.</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════ CAT 3 ═══ -->
+<section class="category" id="cat3">
+  <div class="cat-header">
+    <span class="cat-num">CAT·03</span>
+    <h2>Sell Codebases / Exit — Sell the Asset Outright</h2>
+  </div>
+  <p class="cat-desc">Unfinished or finished projects sold as-is. You sell once, done. No maintenance required after sale.</p>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Flippa</span>
+      <span class="badge badge-fee">~5–15% success fee</span>
+      <span class="platform-tagline">Sell websites, apps, domains. Active marketplace.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Listing fee ($29–$499 depending on category) + success fee ~5–15% on sale price. Smaller sales pay higher % cut.</span></div>
+      <div class="field"><span class="field-label">What sells</span><span class="field-value">Websites with traffic, apps with revenue, domains, even just codebases. "Side project" category exists.</span></div>
+      <div class="field"><span class="field-label">Unfinished apps</span><span class="field-value">Yes — listed as "starter" or "side project." Buyers know they're getting unfinished work. Market exists.</span></div>
+      <div class="field"><span class="field-label">Audience</span><span class="field-value">Buyers are often micro-entrepreneurs, indie hackers, investors looking for existing projects to take over.</span></div>
+    </div>
+    <div class="notes">Most accessible for lower-value assets. Revenue-generating projects get 3–5x multiples. A non-revenue codebase still sells if it has real functionality — list it as a "starter project" with clear documentation of what's left to build. URL: <a class="url-link" href="https://flippa.com" target="_blank">flippa.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Acquire.com</span>
+      <span class="badge badge-fee">~6% success fee</span>
+      <span class="platform-tagline">Higher-end SaaS/startup acquisitions. Better if you have any MRR.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Free to list. ~6% success fee on completed sale. Escrow + legal handled.</span></div>
+      <div class="field"><span class="field-label">Minimum</span><span class="field-value">Works best with $1k+ MRR. Below that, Flippa is more appropriate.</span></div>
+    </div>
+    <div class="notes">If a codebase has any recurring revenue, Acquire is the right marketplace. Zero-revenue projects: Flippa is better. URL: <a class="url-link" href="https://acquire.com" target="_blank">acquire.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">CodeCanyon (Envato Market)</span>
+      <span class="badge badge-gate">Approval</span>
+      <span class="badge badge-fee">30–55% Envato cut</span>
+      <span class="platform-tagline">Sell HTML templates, JS plugins, UI kits. Large marketplace. Heavy cut.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Envato takes 30–55% depending on exclusivity. Non-exclusive authors: you keep ~55%. Exclusive authors: you keep ~62.5%+ (but you can only sell through Envato).</span></div>
+      <div class="field"><span class="field-label">Approval</span><span class="field-value">Every item reviewed before publishing. Quality bar is real. HTML/CSS/JS templates, scripts, plugins — all accepted categories.</span></div>
+      <div class="field"><span class="field-label">Audience</span><span class="field-value">Large. Thousands of buyers specifically looking for template/plugin code.</span></div>
+      <div class="field"><span class="field-label">Sell type</span><span class="field-value">Regular license vs Extended license. Buyers pay once per project. Recurring income from multiple buyers over time.</span></div>
+    </div>
+    <div class="notes">Good for: well-polished HTML templates, UI components, JS tools. Bad for: unfinished apps (doesn't fit). The approval bar filters out low-quality work — if your quality is as high as you say, you'll pass. Heavy cut, but large captive audience. URL: <a class="url-link" href="https://codecanyon.net" target="_blank">codecanyon.net</a></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════ CAT 4 ═══ -->
+<section class="category" id="cat4">
+  <div class="cat-header">
+    <span class="cat-num">CAT·04</span>
+    <h2>Freelance Services Platforms</h2>
+  </div>
+  <p class="cat-desc">You get hired to build things. Platforms connect you with clients. Varying take-rates and discovery dynamics.</p>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Contra</span>
+      <span class="badge badge-free">0% commission</span>
+      <span class="badge badge-sub">Pro required to apply</span>
+      <span class="platform-tagline">Commission-free but job volume is thin. Better as inbound than outbound.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost to you</span><span class="field-value">0% commission. Clients pay a $29 contract fee (one-time) or $29/mo for ongoing. You keep 100%.</span></div>
+      <div class="field"><span class="field-label">Gate</span><span class="field-value">Pro plan required to actively apply for jobs. Limited free browsing.</span></div>
+      <div class="field"><span class="field-label">Job volume</span><span class="field-value">Lower than Upwork. Skews heavily toward: designers, UI/UX, Webflow devs, animators. Not great for Python/writing.</span></div>
+      <div class="field"><span class="field-label">Best use</span><span class="field-value">Portfolio hosting + managing existing client relationships without losing a cut. Inbound via profile &gt; outbound job-hunting.</span></div>
+    </div>
+    <div class="notes">Real talk: if you already have leads coming in via other channels (Reddit, referral, etc.), Contra is a great frictionless way to close them and get paid without losing 20%. If you need to find clients from scratch, the job volume might frustrate you. URL: <a class="url-link" href="https://contra.com" target="_blank">contra.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Upwork</span>
+      <span class="badge badge-fee">~10–15%</span>
+      <span class="platform-tagline">Largest pool of actual client work. Competition is real. Consistent.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">Variable service fee as of May 2025. Previously 20%/$500, 10%/$500–$10k, 5% above. Now: ~10–15% depending on job type/market. New contracts subject to current rate.</span></div>
+      <div class="field"><span class="field-label">Getting in</span><span class="field-value">No approval to join. Connects (tokens) needed to apply for jobs. 10 free/mo. Plus plan for 90 more + AI proposal help.</span></div>
+    </div>
+    <div class="notes">Best for: consistent inbound work volume if you're good at writing proposals. Web + app dev is a strong category here. High competition but high volume. URL: <a class="url-link" href="https://upwork.com" target="_blank">upwork.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Fiverr</span>
+      <span class="badge badge-fee">20% flat</span>
+      <span class="platform-tagline">Gig-based. Highest take-rate. Discovery-heavy. Works if you can rank.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">20% flat on all earnings. No tiers, no reductions.</span></div>
+      <div class="field"><span class="field-label">Model</span><span class="field-value">You list a gig (fixed service). Buyers find you via search. Strong discovery if you rank. New sellers bury fast.</span></div>
+    </div>
+    <div class="notes">Worth testing a specific niche gig (e.g., "cinematic one-page website in 3 days") to see if it ranks. The 20% is brutal but if gigs convert without you lifting a finger, it's passive. URL: <a class="url-link" href="https://fiverr.com" target="_blank">fiverr.com</a></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════ CAT 5 ═══ -->
+<section class="category" id="cat5">
+  <div class="cat-header">
+    <span class="cat-num">CAT·05</span>
+    <h2>Bounty Platforms — Get Paid to Fix / Build Specific Issues</h2>
+  </div>
+  <p class="cat-desc">Companies or maintainers post a specific task with a cash reward. You complete it, you get paid.</p>
+
+  <div class="platform deprecated">
+    <div class="platform-head">
+      <span class="platform-name">Replit Bounties</span>
+      <span class="badge badge-dead">⚠ DEPRECATED</span>
+      <span class="platform-tagline">Dead. AI keeps recommending this. Don't waste time on it.</span>
+    </div>
+    <div class="notes"><span class="warn-tag">DEPRECATED:</span> Replit is no longer accepting Bounty Hunter applications as of 2025. The bounty program has been officially deprecated. Paid in Replit Cycles (internal currency), 25% cashout fee, minimum 35k Cycles to cash out. Avoid entirely. The focus shifted to Replit Agent. Don't pursue this.</div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Algora.io</span>
+      <span class="badge badge-free">Free</span>
+      <span class="platform-tagline">Open source bounties on GitHub issues ONLY. Not general freelance work.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">How it works</span><span class="field-value">Companies post bounties on their open source GitHub issues. You solve the issue, submit PR, get paid via Stripe.</span></div>
+      <div class="field"><span class="field-label">Scope</span><span class="field-value">Open source code contributions. This is NOT a general "build me a web app" platform. Must be a public GitHub repo issue.</span></div>
+      <div class="field"><span class="field-label">Payout</span><span class="field-value">Real USD via Stripe. 2–7 days. 1099s handled for US freelancers.</span></div>
+    </div>
+    <div class="notes">Fit for Scott: LOW — unless contributing to OSS projects. Good for building credibility + earning on the side, but requires GitHub-based open source work. Volume of bounties is real but niche. URL: <a class="url-link" href="https://algora.io" target="_blank">algora.io</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">IssueHunt</span>
+      <span class="badge badge-free">Free</span>
+      <span class="platform-tagline">Similar to Algora. Quieter. OSS GitHub issues only.</span>
+    </div>
+    <div class="notes">Same category as Algora — OSS bounties on GitHub issues. Lower volume. Worth checking what's listed but don't rely on it as a primary income source. URL: <a class="url-link" href="https://issuehunt.io" target="_blank">issuehunt.io</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Opire</span>
+      <span class="badge badge-free">Free</span>
+      <span class="platform-tagline">Newer Algora alternative. OSS bounties. Growing.</span>
+    </div>
+    <div class="notes">Same model as Algora. Newer, less volume currently, but growing. Anyone can create a reward on a public GitHub issue — not just companies. URL: <a class="url-link" href="https://opire.dev" target="_blank">opire.dev</a></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════ CAT 6 ═══ -->
+<section class="category" id="cat6">
+  <div class="cat-header">
+    <span class="cat-num">CAT·06</span>
+    <h2>Developer / SaaS-Specific Platforms</h2>
+  </div>
+  <p class="cat-desc">Built for selling subscriptions, SaaS tools, and developer products. Usually full MoR with license key + billing infrastructure.</p>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Polar</span>
+      <span class="badge badge-fee">4% + $0.40</span>
+      <span class="badge badge-mor">Full MoR</span>
+      <span class="platform-tagline">Cheapest MoR option. GitHub integration. Developer-native.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">4% + $0.40 per transaction. Cheapest full MoR on the market currently.</span></div>
+      <div class="field"><span class="field-label">Features</span><span class="field-value">License keys, private GitHub repo access gating, Discord access gating, usage-based billing, subscriptions.</span></div>
+      <div class="field"><span class="field-label">Tax</span><span class="field-value">Full global MoR. Handles VAT/GST/sales tax.</span></div>
+      <div class="field"><span class="field-label">Limitation</span><span class="field-value">Newer platform. Feature set still evolving. Payment methods: cards via Stripe only (no PayPal yet).</span></div>
+    </div>
+    <div class="notes">Best for: developer tools, OSS monetization, anything with a GitHub audience. Strong product for its price. URL: <a class="url-link" href="https://polar.sh" target="_blank">polar.sh</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Fungies.io</span>
+      <span class="badge badge-fee">5% + $0.50</span>
+      <span class="badge badge-mor">Full MoR</span>
+      <span class="platform-tagline">Newer LemonSqueezy alternative. Same rate, no acquisition uncertainty.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">5% + $0.50. No monthly fee. Full global MoR.</span></div>
+      <div class="field"><span class="field-label">Advantage over LS</span><span class="field-value">No Stripe transition uncertainty. Embeddable checkout on your own domain. No approval gate reported.</span></div>
+    </div>
+    <div class="notes">Growing fast as an LM alternative post-Stripe acquisition confusion. Worth considering if LemonSqueezy re-application doesn't work out. URL: <a class="url-link" href="https://fungies.io" target="_blank">fungies.io</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Paddle</span>
+      <span class="badge badge-fee">5% + $0.50 base</span>
+      <span class="badge badge-mor">Full MoR</span>
+      <span class="badge badge-gate">Approval</span>
+      <span class="platform-tagline">Enterprise/B2B SaaS focus. More structured. Approval required.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Cost</span><span class="field-value">5% + $0.50. Additional fees for some markets.</span></div>
+      <div class="field"><span class="field-label">Target</span><span class="field-value">B2B SaaS with real revenue. Overkill for indie tools.</span></div>
+    </div>
+    <div class="notes">Not the right fit for small tools and starter products. Better for SaaS that's already generating. Approval process. URL: <a class="url-link" href="https://paddle.com" target="_blank">paddle.com</a></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════ CAT 7 ═══ -->
+<section class="category" id="cat7">
+  <div class="cat-header">
+    <span class="cat-num">CAT·07</span>
+    <h2>Channels — Not Platforms, But Where Buyers Are</h2>
+  </div>
+  <p class="cat-desc">These aren't platforms you sell on — they're places you post to drive traffic to your store/listings.</p>
+
+  <div class="platform note-only">
+    <div class="platform-head">
+      <span class="platform-name">Show HN (Hacker News)</span>
+      <span class="badge badge-free">Free</span>
+      <span class="platform-tagline">One post. Right audience (technical buyers). Zero ongoing cost.</span>
+    </div>
+    <div class="notes">Post format: "Show HN: [What You Built] — [one line]." Technical audience. If it resonates, front page = thousands of views in 24 hours. You only get one good shot — post when the product is actually ready. Best for: developer tools, interesting apps, anything with a technical angle. URL: <a class="url-link" href="https://news.ycombinator.com/show" target="_blank">news.ycombinator.com/show</a></div>
+  </div>
+
+  <div class="platform note-only">
+    <div class="platform-head">
+      <span class="platform-name">Reddit</span>
+      <span class="badge badge-free">Free</span>
+      <span class="platform-tagline">Contextual link drops in relevant threads. Not spam posting.</span>
+    </div>
+    <div class="notes">Not about posting ads. Find someone asking a question your tool answers and drop the link contextually. Key subs: r/SideProject, r/webdev, r/Entrepreneur, r/forhire, r/learnprogramming (for tools), r/artificial (for AI tools). People roast self-promo posts — but nobody roasts "here's something that solves your exact question." That's relevance.</div>
+  </div>
+
+  <div class="platform note-only">
+    <div class="platform-head">
+      <span class="platform-name">Product Hunt</span>
+      <span class="badge badge-free">Free</span>
+      <span class="platform-tagline">Launch day visibility. Startup/indie audience. One-shot event.</span>
+    </div>
+    <div class="notes">Good for a formal launch event. You get one launch day — can generate hundreds of upvotes and direct buyers if you have even a small supporting community. Audience is founders, PMs, early adopters. Not a sustained discovery channel — it's a launch spike tool.</div>
+  </div>
+
+  <div class="platform note-only">
+    <div class="platform-head">
+      <span class="platform-name">GitHub (Public Repos + Sponsorships)</span>
+      <span class="badge badge-free">Free</span>
+      <span class="platform-tagline">For developer tools — credibility + organic discovery + GitHub Sponsors.</span>
+    </div>
+    <div class="notes">GitHub Sponsors lets anyone fund your open source work. If a tool is open source but you offer a paid "pro" version or hosted version, GitHub is a credibility anchor that drives Gumroad/Payhip purchases. Stars = social proof for technical buyers.</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ CAT 8 — Adult AI Image Sales Platforms ═══ -->
+<section class="category" id="cat8">
+  <div class="cat-header">
+    <span class="cat-num">CAT·08</span>
+    <h2>Adult AI Image Sales Platforms — Explicit Tease / Nude Packs</h2>
+  </div>
+  <p class="cat-desc">Platforms suitable for selling large packs of AI-generated adult tease content (outdoor dress-lift, bare ass, no-panties, multiple different models). Based on exact policies discussed for your 800-image photoreal collection.</p>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Fanvue</span>
+      <span class="badge badge-fee">~20% (80% creator payout)</span>
+      <span class="badge badge-sub">Sub + PPV</span>
+      <span class="platform-tagline">Best overall match for photoreal AI adult tease packs with multiple models</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">AI Policy</span><span class="field-value">Explicitly allows fully AI-generated fictional adult content (solo tease, spreading, fingers, dildos). Requires clear disclosure (#AIGenerated • Fictional 25+ adult). No real-person likeness allowed.</span></div>
+      <div class="field"><span class="field-label">Monetization</span><span class="field-value">Subscriptions + Pay-Per-View. Can sell full 800-image pack as PPV or gate behind sub.</span></div>
+      <div class="field"><span class="field-label">Payout</span><span class="field-value">~80% to creator (higher in early months).</span></div>
+      <div class="field"><span class="field-label">Best For</span><span class="field-value">Your multi-model outdoor bare-ass tease collection. Solo female focus with optional spreading/finger bonuses. Recurring revenue possible with light posting.</span></div>
+    </div>
+    <div class="notes">Strongest policy fit and payout for photoreal AI nudes of fictional adults. Requires some activity (3–5 posts/week) for retention. Higher-scrutiny content (AI male partner) possible but adds moderation flags — solo is safest. URL: <a class="url-link" href="https://fanvue.com" target="_blank">fanvue.com</a></div>
+  </div>
+
+  <div class="platform deprecated">
+    <div class="platform-head">
+      <span class="platform-name">DLsite (AI専用区)</span>
+      <span class="badge badge-dead">High Risk / Often Rejected</span>
+      <span class="platform-tagline">Bulk omnibus sales allowed but photoreal ban applies</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">AI Policy</span><span class="field-value">Dedicated AI section but "We do not handle works which include photorealistic AI images." Your collection is photoreal → high rejection risk.</span></div>
+      <div class="field"><span class="field-label">Monetization</span><span class="field-value">Direct one-time digital sales (~70% creator keep after ~30% commission). Bulk sets up to 1,000 images.</span></div>
+      <div class="field"><span class="field-label">Other Limits</span><span class="field-value">Japanese-style mosaic required on genitals. Max 3 AI works per month. Moderation delays.</span></div>
+      <div class="field"><span class="field-label">Best For</span><span class="field-value">Non-photoreal (anime/illustrated) AI packs only. Not suitable for your current photoreal multi-model tease collection.</span></div>
+    </div>
+    <div class="notes">Only viable if you heavily stylize images away from photoreal. Japanese interface + compliance rules add friction. URL: <a class="url-link" href="https://www.dlsite.com" target="_blank">dlsite.com</a></div>
+  </div>
+
+  <div class="platform deprecated">
+    <div class="platform-head">
+      <span class="platform-name">Etsy</span>
+      <span class="badge badge-dead">Not Viable for Explicit Content</span>
+      <span class="platform-tagline">Strict adult content rules make explicit tease packs impossible</span>
+    </div>
+    <div class="grid-2">
+      <div class="field"><span class="field-label">Adult Policy</span><span class="field-value">Prohibits pornography and most explicit nudity/sexual content. Bare ass, no-panties, dress-lift shots frequently flagged/removed.</span></div>
+      <div class="field"><span class="field-label">Monetization</span><span class="field-value">Digital downloads with built-in audience.</span></div>
+      <div class="field"><span class="field-label">Best For</span><span class="field-value">Heavily censored "fine art boudoir" versions only (strategic covering, no full exposure). Terrible for your explicit multi-model collection.</span></div>
+    </div>
+    <div class="notes">Even "tit pics" seen there are often censored or eventually removed. High risk of listing takedowns and account suspension. URL: <a class="url-link" href="https://etsy.com" target="_blank">etsy.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">OnlyFans</span>
+      <span class="badge badge-dead">Not Suitable</span>
+      <span class="platform-tagline">AI content restricted to verified creator</span>
+    </div>
+    <div class="notes">AI content allowed only if it features the verified account holder. Your fictional multi-model collection does not qualify. Subscriptions + PPV model. URL: <a class="url-link" href="https://onlyfans.com" target="_blank">onlyfans.com</a></div>
+  </div>
+
+  <div class="platform deprecated">
+    <div class="platform-head">
+      <span class="platform-name">Fansly</span>
+      <span class="badge badge-dead">Banned</span>
+      <span class="platform-tagline">Strict ban on photorealistic AI</span>
+    </div>
+    <div class="notes">Prohibits photorealistic AI-generated content. Not viable for your collection. URL: <a class="url-link" href="https://fansly.com" target="_blank">fansly.com</a></div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">dFans</span>
+      <span class="badge badge-fee">Not specified</span>
+      <span class="platform-tagline">AI-native adult platform</span>
+    </div>
+    <div class="notes">Allows AI adult content. Crypto tips supported. Subscription/PPV focused like Fanvue — more work for bulk sales. Secondary option only. URL: search "dFans adult platform"</div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">LoyalFans</span>
+      <span class="badge badge-fee">20% commission</span>
+      <span class="platform-tagline">Erotic/fetish allowed with standards</span>
+    </div>
+    <div class="notes">Accepts adult content but subscription-focused. No clear confirmation for large pre-made AI image packs. Not ideal for one-time bulk drops. URL: search "LoyalFans"</div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Moxie</span>
+      <span class="badge badge-fee">Crypto commissions</span>
+      <span class="platform-tagline">Crypto-based AI adult</span>
+    </div>
+    <div class="notes">Allows AI adult content but focused on on-demand commissions, not pre-made bulk packs. Not a good fit. URL: search "Moxie AI adult platform"</div>
+  </div>
+
+  <div class="platform deprecated">
+    <div class="platform-head">
+      <span class="platform-name">Vylit</span>
+      <span class="badge badge-dead">Prohibited</span>
+      <span class="platform-tagline">Full nudity banned</span>
+    </div>
+    <div class="notes">Allows topless at best but prohibits full nudity/explicit material. Your bare-ass content exceeds limits. Not viable. URL: search "Vylit"</div>
+  </div>
+
+  <div class="platform">
+    <div class="platform-head">
+      <span class="platform-name">Civitai</span>
+      <span class="badge badge-dead">Not for finished images</span>
+      <span class="platform-tagline">LoRA/model marketplace only</span>
+    </div>
+    <div class="notes">Bans direct sale of explicit finished image packs. Only for selling LoRAs / AI models. Not suitable for your 800-image collection. URL: <a class="url-link" href="https://civitai.com" target="_blank">civitai.com</a></div>
+  </div>
+</section>
+
+
+<footer>
+  BNDR LLC · Platform Reference v1.0 · Researched April 2026 · Fees verified against live sources · Review annually — rates change
+</footer>
+
+</body>
+</html>
+```
