@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793410356263,
+      "tag": "0000_proofloop_data_layer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793410634158,
+      "tag": "0001_fuzzy_scarecrow",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793410650414,
+      "tag": "0002_database_invariants",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793411103218,
+      "tag": "0003_argon2_password_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793411220600,
+      "tag": "0004_deterministic_risk_footprint",
+      "breakpoints": true
+    }
+  ]
+}

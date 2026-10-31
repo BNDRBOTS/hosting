@@ -1,0 +1,1 @@
+CREATE INDEX "approver_decisions_request_decided_idx" ON "approver_decisions" USING btree ("change_request_id","decided_at");

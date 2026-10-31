@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: proofloop
+      POSTGRES_USER: proofloop
+      POSTGRES_PASSWORD: proofloop
+    ports:
+      - "5432:5432"
+    volumes:
+      - proofloop-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U proofloop -d proofloop"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://proofloop:proofloop@db:5432/proofloop
+      PROOFLOOP_MASTER_KEY: ${PROOFLOOP_MASTER_KEY:?Set PROOFLOOP_MASTER_KEY in .env}
+      PROOFLOOP_INTAKE_KEY: ${PROOFLOOP_INTAKE_KEY:?Set PROOFLOOP_INTAKE_KEY in .env}
+      PROOFLOOP_IMPLEMENTER_KEY: ${PROOFLOOP_IMPLEMENTER_KEY:?Set PROOFLOOP_IMPLEMENTER_KEY in .env}
+      PROOFLOOP_VERIFIER_KEY: ${PROOFLOOP_VERIFIER_KEY:?Set PROOFLOOP_VERIFIER_KEY in .env}
+      PROOFLOOP_RISK_KEY: ${PROOFLOOP_RISK_KEY:?Set PROOFLOOP_RISK_KEY in .env}
+      PROOFLOOP_APPROVER_KEY: ${PROOFLOOP_APPROVER_KEY:?Set PROOFLOOP_APPROVER_KEY in .env}
+      PROOFLOOP_SHIPPER_KEY: ${PROOFLOOP_SHIPPER_KEY:?Set PROOFLOOP_SHIPPER_KEY in .env}
+      PROOFLOOP_WATCHER_KEY: ${PROOFLOOP_WATCHER_KEY:?Set PROOFLOOP_WATCHER_KEY in .env}
+      PROOFLOOP_ORCHESTRATOR_KEY: ${PROOFLOOP_ORCHESTRATOR_KEY:?Set PROOFLOOP_ORCHESTRATOR_KEY in .env}
+      PROOFLOOP_EVIDENCE_DIR: /var/lib/proofloop/evidence
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - proofloop-evidence:/var/lib/proofloop/evidence
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.status===200?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  proofloop-postgres:
+  proofloop-evidence:
